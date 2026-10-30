@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restablecer contraseña · Ruka</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<main>
+  <header>
+    <img src="icono.png" alt="">
+    <div><strong>Ruka</strong><br><span>Organización del hogar · Nyraxes</span></div>
+  </header>
+
+  <h1>Restablecer tu contraseña</h1>
+
+  <!-- Gmail y otros clientes no dejan tocar links homely://, así que el mail apunta acá
+       (https) y esta página abre la app con el mismo token. -->
+  <section class="card destacado" id="con-token" hidden>
+    <p>Estamos abriendo Ruka para que elijas una contraseña nueva.</p>
+    <p><a id="abrir" href="#">Abrir Ruka</a></p>
+    <p class="fecha">Si no se abre, asegurate de tener la app instalada en este teléfono y tocá el botón de arriba.</p>
+  </section>
+
+  <section class="card" id="sin-token" hidden>
+    <p>Este link no es válido o está incompleto. Pedí uno nuevo desde la app: <strong>Iniciar sesión → ¿Olvidaste tu contraseña?</strong></p>
+  </section>
+
+  <footer>
+    <nav><a href="index.html">Inicio</a><a href="privacidad.html">Política de privacidad</a></nav>
+  </footer>
+</main>
+<script>
+  (function () {
+    var token = new URLSearchParams(window.location.search).get('token');
+    if (!token) {
+      document.getElementById('sin-token').hidden = false;
+      return;
+    }
+    var deepLink = 'homely://reset-password?token=' + encodeURIComponent(token);
+    document.getElementById('abrir').href = deepLink;
+    document.getElementById('con-token').hidden = false;
+    window.location.href = deepLink;
+  })();
+</script>
+</body>
+</html>
