@@ -1,0 +1,31 @@
+name: Publicar APK
+
+# Baja un APK de Expo y lo publica como el último Release. Así el link de abajo no cambia nunca,
+# aunque los de Expo venzan a los 14 días, y el Release no lleva el nombre de nadie:
+# https://github.com/Nyraxes/nyraxes.github.io/releases/latest/download/Ruka.apk
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Versión, como 1.4.1
+        required: true
+      url:
+        description: Link del APK en Expo
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bajar el APK
+        env:
+          URL: ${{ inputs.url }}
+        run: curl -fsSL -o Ruka.apk "$URL"
+      - name: Publicarlo
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: gh release create "v$VERSION" Ruka.apk --repo "$GITHUB_REPOSITORY" --title "Ruka $VERSION" --latest --notes "Para Android. Se instala encima de la versión anterior y no perdés nada."
